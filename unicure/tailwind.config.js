@@ -7,8 +7,14 @@ export default {
   theme: {
     extend: {
       colors: {
-        'medical-blue': '#4A90E2',
-        'medical-light': '#F5F9FF',
+        'medical-blue': '#0066FF', // Bright blue
+        'medical-dark-blue': '#004ECC', // Darker blue for hover states
+        'medical-light': '#F0F7FF', // Very light blue background
+        'medical-gray': '#F7F7F7', // Light gray for subtle backgrounds
+        'medical-text': '#333333', // Dark gray for text
+        'medical-accent': '#00D2FF', // Cyan accent for highlights
+        'medical-gradient-start': '#0066FF', // Start of gradient
+        'medical-gradient-end': '#00D2FF', // End of gradient
         border: "hsl(var(--border))",
         input: "hsl(var(--input))",
         ring: "hsl(var(--ring))",

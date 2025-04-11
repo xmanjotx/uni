@@ -12,8 +12,26 @@ function App() {
   ]);
   const [isLoading, setIsLoading] = useState(false);
 
+  // Get API key from environment variables or use fallback for development
+  const API_KEY = import.meta.env.VITE_DEEPSEEK_API_KEY || 'sk-3a43fbd8e2084f5288e39ff997117679';
+
   const handleSendMessage = async (message) => {
     if (!message.trim()) return;
+
+    let messageContent = message;
+    let attachmentData = null;
+
+    // Check if the message is in JSON format (contains attachment)
+    try {
+      const parsedMessage = JSON.parse(message);
+      if (parsedMessage.text !== undefined) {
+        messageContent = parsedMessage.text;
+        attachmentData = parsedMessage.attachment;
+      }
+    } catch (e) {
+      // Not JSON, use as is
+      messageContent = message;
+    }
 
     // Add user message to chat
     setMessages(prev => [...prev, { role: 'user', content: message }]);
@@ -21,18 +39,19 @@ function App() {
 
     try {
       // Prepare message history for the API
-      const messageHistory = messages.concat({ role: 'user', content: message });
+      const messageHistory = messages.concat({ 
+        role: 'user', 
+        content: messageContent + (attachmentData ? ` [Attached: ${attachmentData.name}]` : '')
+      });
       
-      const response = await fetch('https://openrouter.ai/api/v1/chat/completions', {
+      const response = await fetch('https://api.deepseek.com/v1/chat/completions', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
-          'Authorization': `Bearer ${import.meta.env.VITE_OPENROUTER_API_KEY}`,
-          'HTTP-Referer': window.location.origin, // Required for OpenRouter
-          'X-Title': 'UniCure AI Medical Assistant' // Optional but recommended
+          'Authorization': `Bearer ${API_KEY}`
         },
         body: JSON.stringify({
-          model: 'anthropic/claude-3-opus', // You can change to other medical models
+          model: 'deepseek-chat',
           messages: messageHistory,
           stream: true,
           temperature: 0.7,
@@ -94,6 +113,21 @@ function App() {
 
   return (
     <div className="flex flex-col h-screen bg-medical-light">
+      <header className="bg-gradient-to-r from-medical-gradient-start to-medical-gradient-end shadow-md p-4 border-b border-blue-200">
+        <div className="container mx-auto max-w-4xl flex items-center justify-between">
+          <h1 className="text-2xl font-bold text-white flex items-center">
+            <svg className="w-8 h-8 mr-2" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M12 2L4 6V12C4 15.31 7.58 19.5 12 22C16.42 19.5 20 15.31 20 12V6L12 2Z" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+              <path d="M12 11C12.5523 11 13 10.5523 13 10C13 9.44772 12.5523 9 12 9C11.4477 9 11 9.44772 11 10C11 10.5523 11.4477 11 12 11Z" fill="white" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+              <path d="M12 15V13" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+            </svg>
+            UniCure
+          </h1>
+          <div className="text-white text-sm bg-white bg-opacity-20 px-3 py-1 rounded-full">
+            AI Medical Assistant
+          </div>
+        </div>
+      </header>
       <main className="flex-1 container mx-auto max-w-4xl p-4 flex flex-col">
         <ChatInterface 
           messages={messages}

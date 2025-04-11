@@ -1,0 +1,6 @@
+Please create a logo image file named 'unicure-logo.png' and place it in this directory.
+
+The logo should be a medical-themed icon with the text 'UniCure' in a modern font.
+Suggested colors: Blue gradient (#0066FF to #00D2FF)
+
+This text file is a placeholder since the AI assistant cannot generate image files directly.
