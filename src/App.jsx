@@ -8,7 +8,7 @@ function App() {
   const { messages, isLoading, sendMessage } = useChat();
 
   return (
-    <div className="flex h-screen bg-[#0A0A0A]">
+    <div className="flex h-screen bg-[#F8FAFC]"> {/* Light medical background */}
       {/* Sidebar */}
       <Sidebar isOpen={isSidebarOpen} setIsOpen={setIsSidebarOpen} />
 
@@ -25,5 +25,3 @@ function App() {
     </div>
   );
 }
-
-export default App;
