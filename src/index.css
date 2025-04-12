@@ -8,23 +8,33 @@
   }
 }
 
-/* Custom scrollbar */
-@layer utilities {
-  .scrollbar-thin {
-    scrollbar-width: thin;
+@layer components {
+  .medical-card {
+    @apply p-4 rounded-xl bg-white shadow-md hover:shadow-lg transition-all border border-gray-100;
   }
-  
-  .scrollbar-thumb-gray-300::-webkit-scrollbar-thumb {
-    background-color: #D1D5DB;
-    border-radius: 9999px;
+
+  .medical-button {
+    @apply px-4 py-2 bg-[#1A3B5B] text-white rounded-lg hover:bg-[#2C4F7A] transition-colors;
   }
-  
-  .scrollbar-track-transparent::-webkit-scrollbar-track {
-    background-color: transparent;
+
+  .medical-input {
+    @apply border-gray-200 rounded-lg focus:ring-[#1A3B5B] focus:border-[#1A3B5B];
   }
-  
-  .scrollbar-thin::-webkit-scrollbar {
-    width: 6px;
+
+  .response-section {
+    @apply border-l-4 border-[#1A3B5B] pl-4 my-4;
+  }
+
+  .response-header {
+    @apply text-[#1A3B5B] font-semibold mb-2;
+  }
+
+  .response-list {
+    @apply space-y-2;
+  }
+
+  .response-item {
+    @apply flex items-start gap-2 text-gray-700;
   }
 }
 
@@ -42,66 +52,4 @@
 
 .message-animation {
   animation: slideIn 0.3s ease-out forwards;
-}
-
-/* Typography for medical responses */
-.prose {
-  @apply text-gray-800;
-}
-
-.prose-blue {
-  @apply prose-headings:text-[#1A3B5B]
-         prose-a:text-blue-600 
-         prose-a:no-underline 
-         prose-a:hover:underline
-         prose-strong:text-[#1A3B5B]
-         prose-strong:font-semibold;
-}
-
-.prose ul {
-  @apply space-y-2;
-}
-
-.prose li {
-  @apply flex items-start gap-2;
-}
-
-.prose li:before {
-  content: "•";
-  @apply text-[#1A3B5B] flex-shrink-0;
-}
-
-/* Medical components */
-.medical-card {
-  @apply p-4 rounded-xl bg-white shadow-md hover:shadow-lg transition-all border border-gray-100;
-}
-
-.medical-button {
-  @apply px-4 py-2 bg-[#1A3B5B] text-white rounded-lg hover:bg-[#2C4F7A] transition-colors;
-}
-
-.medical-input {
-  @apply border-gray-200 rounded-lg focus:ring-[#1A3B5B] focus:border-[#1A3B5B];
-}
-
-/* Response formatting */
-.response-section {
-  @apply border-l-4 border-[#1A3B5B] pl-4 my-4;
-}
-
-.response-header {
-  @apply text-[#1A3B5B] font-semibold mb-2;
-}
-
-.response-list {
-  @apply space-y-2;
-}
-
-.response-item {
-  @apply flex items-start gap-2 text-gray-700;
-}
-
-.response-item:before {
-  content: "•";
-  @apply text-[#1A3B5B];
 }
