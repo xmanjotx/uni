@@ -1,6 +1,6 @@
 import { useState } from 'react';
 
-export const useChat = () => {
+const useChat = () => {
   const [messages, setMessages] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
 
@@ -31,12 +31,22 @@ export const useChat = () => {
       const data = await response.json();
       const botMessage = data.choices[0].message.content;
 
-      setMessages(prev => [...prev, { role: 'assistant', content: botMessage }]);
+      // Format the response with bullet points
+      const formattedResponse = botMessage
+        .split('\n')
+        .map(line => line.trim())
+        .map(line => line.startsWith('-') ? `•${line.substring(1)}` : line)
+        .join('\n');
+
+      setMessages(prev => [...prev, { 
+        role: 'assistant', 
+        content: formattedResponse 
+      }]);
     } catch (error) {
       console.error('Error:', error);
       setMessages(prev => [...prev, {
         role: 'assistant',
-        content: 'Sorry, I encountered an error. Please try again.'
+        content: '• Sorry, I encountered an error. Please try again.\n• If the issue persists, please refresh the page.'
       }]);
     } finally {
       setIsLoading(false);

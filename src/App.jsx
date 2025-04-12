@@ -1,27 +1,22 @@
 import { useState } from 'react';
 import ChatInterface from './components/ChatInterface';
-import Sidebar from './components/Sidebar';
 import useChat from './hooks/useChat';
 
-function App() {
-  const [isSidebarOpen, setIsSidebarOpen] = useState(true);
+const App = () => {
   const { messages, isLoading, sendMessage } = useChat();
 
   return (
-    <div className="flex h-screen bg-[#F8FAFC]"> {/* Light medical background */}
-      {/* Sidebar */}
-      <Sidebar isOpen={isSidebarOpen} setIsOpen={setIsSidebarOpen} />
-
+    <div className="flex h-screen bg-background">
       {/* Main Chat Area */}
-      <main className={`flex-1 flex flex-col transition-all duration-300 ${isSidebarOpen ? 'ml-64' : 'ml-0'}`}>
-        <div className="flex-1 relative">
-          <ChatInterface
-            messages={messages}
-            onSendMessage={sendMessage}
-            isLoading={isLoading}
-          />
-        </div>
+      <main className="flex-1 flex flex-col">
+        <ChatInterface
+          messages={messages}
+          onSendMessage={sendMessage}
+          isLoading={isLoading}
+        />
       </main>
     </div>
   );
-}
+};
+
+export default App;
