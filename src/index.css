@@ -4,37 +4,29 @@
 
 @layer base {
   body {
-    @apply antialiased bg-[#F8FAFC] text-gray-800;
+    @apply antialiased bg-gray-50 text-gray-800;
   }
 }
 
 @layer components {
-  .medical-card {
-    @apply p-4 rounded-xl bg-white shadow-md hover:shadow-lg transition-all border border-gray-100;
+  .chat-message {
+    @apply max-w-[80%] rounded-xl p-4;
   }
 
-  .medical-button {
-    @apply px-4 py-2 bg-[#1A3B5B] text-white rounded-lg hover:bg-[#2C4F7A] transition-colors;
+  .user-message {
+    @apply bg-[#1A3B5B] text-white;
   }
 
-  .medical-input {
-    @apply border-gray-200 rounded-lg focus:ring-[#1A3B5B] focus:border-[#1A3B5B];
+  .ai-message {
+    @apply bg-white shadow-md border border-gray-100;
   }
 
-  .response-section {
-    @apply border-l-4 border-[#1A3B5B] pl-4 my-4;
+  .message-header {
+    @apply flex items-center gap-2 mb-2 pb-2 border-b border-gray-100;
   }
 
-  .response-header {
-    @apply text-[#1A3B5B] font-semibold mb-2;
-  }
-
-  .response-list {
-    @apply space-y-2;
-  }
-
-  .response-item {
-    @apply flex items-start gap-2 text-gray-700;
+  .badge {
+    @apply text-xs px-2 py-1 rounded-full bg-blue-50 text-[#1A3B5B];
   }
 }
 

@@ -1,5 +1,5 @@
-import { useState, useRef, useEffect } from 'react';
-import TypingIndicator from './TypingIndicator';
+import React, { useState, useRef, useEffect } from 'react';
+import TypingIndicator from './TypingIndicator.jsx';
 
 const ChatInterface = ({ messages, onSendMessage, isLoading }) => {
   const [input, setInput] = useState('');
@@ -19,6 +19,9 @@ const ChatInterface = ({ messages, onSendMessage, isLoading }) => {
     if (input.trim() && !isLoading) {
       onSendMessage(input.trim());
       setInput('');
+      if (textareaRef.current) {
+        textareaRef.current.style.height = 'auto';
+      }
     }
   };
 
@@ -30,43 +33,43 @@ const ChatInterface = ({ messages, onSendMessage, isLoading }) => {
   };
 
   return (
-    <div className="flex flex-col h-screen bg-background">
+    <div className="flex flex-col h-screen bg-gray-50">
       {/* Welcome Message */}
       {messages.length === 0 && (
         <div className="flex-1 flex items-center justify-center p-4">
           <div className="text-center space-y-6 max-w-2xl">
-            <h1 className="text-4xl font-bold text-primary">
+            <h1 className="text-4xl font-bold text-[#1A3B5B]">
               Welcome to Opticure AI
             </h1>
             <p className="text-gray-600 text-lg">
               Your professional medical consultation assistant
             </p>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <button className="medical-card">
+              <button className="p-6 rounded-xl bg-white shadow-md hover:shadow-lg transition-all text-left border border-gray-100">
                 <div className="flex items-center gap-3 mb-2">
                   <span className="text-2xl">🏥</span>
-                  <span className="text-primary font-semibold">Symptom Check</span>
+                  <span className="text-[#1A3B5B] font-semibold">Symptom Check</span>
                 </div>
                 <p className="text-sm text-gray-600">Detailed symptom analysis</p>
               </button>
-              <button className="medical-card">
+              <button className="p-6 rounded-xl bg-white shadow-md hover:shadow-lg transition-all text-left border border-gray-100">
                 <div className="flex items-center gap-3 mb-2">
                   <span className="text-2xl">💊</span>
-                  <span className="text-primary font-semibold">Medications</span>
+                  <span className="text-[#1A3B5B] font-semibold">Medications</span>
                 </div>
                 <p className="text-sm text-gray-600">Medication information</p>
               </button>
-              <button className="medical-card">
+              <button className="p-6 rounded-xl bg-white shadow-md hover:shadow-lg transition-all text-left border border-gray-100">
                 <div className="flex items-center gap-3 mb-2">
                   <span className="text-2xl">📋</span>
-                  <span className="text-primary font-semibold">Health Guide</span>
+                  <span className="text-[#1A3B5B] font-semibold">Health Guide</span>
                 </div>
                 <p className="text-sm text-gray-600">Medical recommendations</p>
               </button>
-              <button className="medical-card">
+              <button className="p-6 rounded-xl bg-white shadow-md hover:shadow-lg transition-all text-left border border-gray-100">
                 <div className="flex items-center gap-3 mb-2">
                   <span className="text-2xl">🧠</span>
-                  <span className="text-primary font-semibold">Mental Health</span>
+                  <span className="text-[#1A3B5B] font-semibold">Mental Health</span>
                 </div>
                 <p className="text-sm text-gray-600">Mental wellness support</p>
               </button>
@@ -81,24 +84,24 @@ const ChatInterface = ({ messages, onSendMessage, isLoading }) => {
           {messages.map((message, index) => (
             <div
               key={index}
-              className={`flex ${message.role === 'user' ? 'justify-end' : 'justify-start'} message-animation`}
+              className={`flex ${message.role === 'user' ? 'justify-end' : 'justify-start'}`}
             >
               <div
                 className={`max-w-[80%] rounded-xl p-4 ${
                   message.role === 'user'
-                    ? 'bg-primary text-white'
+                    ? 'bg-[#1A3B5B] text-white'
                     : 'bg-white shadow-md border border-gray-100'
                 }`}
               >
                 {message.role === 'assistant' && (
                   <div className="flex items-center gap-2 mb-2 pb-2 border-b border-gray-100">
-                    <span className="text-primary font-semibold">Opticure AI</span>
-                    <span className="text-xs px-2 py-1 rounded-full bg-blue-50 text-primary">Medical AI</span>
+                    <span className="text-[#1A3B5B] font-semibold">Opticure AI</span>
+                    <span className="text-xs px-2 py-1 rounded-full bg-blue-50 text-[#1A3B5B]">Medical AI</span>
                   </div>
                 )}
                 <div className="space-y-2">
                   {message.content.split('\n').map((line, i) => (
-                    <p key={i} className={line.startsWith('•') ? 'response-item' : ''}>
+                    <p key={i} className={line.startsWith('•') ? 'flex items-start gap-2' : ''}>
                       {line}
                     </p>
                   ))}
@@ -137,7 +140,7 @@ const ChatInterface = ({ messages, onSendMessage, isLoading }) => {
             <button
               type="submit"
               disabled={!input.trim() || isLoading}
-              className="medical-button disabled:opacity-50 disabled:cursor-not-allowed"
+              className="p-3 rounded-xl bg-[#1A3B5B] text-white hover:bg-[#2C4F7A] transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
             >
               <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 12h14M12 5l7 7-7 7" />

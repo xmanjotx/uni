@@ -1,13 +1,12 @@
-import { useState } from 'react';
-import ChatInterface from './components/ChatInterface';
-import useChat from './hooks/useChat';
+import React from 'react';
+import ChatInterface from './components/ChatInterface.jsx';
+import useChat from './hooks/useChat.js';
 
-const App = () => {
+function App() {
   const { messages, isLoading, sendMessage } = useChat();
 
   return (
     <div className="flex h-screen bg-background">
-      {/* Main Chat Area */}
       <main className="flex-1 flex flex-col">
         <ChatInterface
           messages={messages}
@@ -17,6 +16,6 @@ const App = () => {
       </main>
     </div>
   );
-};
+}
 
 export default App;
