@@ -3,7 +3,9 @@
   "private": true,
   "version": "0.1.0",
   "scripts": {
-    "build": "cd unicure && npm run build",
+    "clean": "cd unicure && rm -rf node_modules package-lock.json",
+    "setup": "cd unicure && npm install",
+    "build": "npm run clean && npm run setup && cd unicure && npm run build",
     "dev": "cd unicure && npm run dev",
     "preview": "cd unicure && npm run preview"
   }
