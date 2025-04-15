@@ -116,52 +116,63 @@ body {
   font-family: 'Inter', Arial, sans-serif;
 }
 
-/* Professional Uber-style Chat UI for DoctorChat */
-.uber-chat-outer {
-  max-width: 420px;
-  margin: 32px auto;
-  background: #fff;
-  border-radius: 24px;
-  box-shadow: 0 8px 32px 0 rgba(0,0,0,0.10);
+/* Upgraded fullscreen, professional, mobile-friendly chat UI */
+.doctor-fullscreen-chat {
+  position: fixed;
+  inset: 0;
+  width: 100vw;
+  height: 100vh;
+  background: linear-gradient(180deg, #f7fbfd 60%, #e6f0fa 100%);
   display: flex;
   flex-direction: column;
-  height: 80vh;
-  overflow: hidden;
-  border: 1px solid #e5e7eb;
+  font-family: 'Inter', 'Uber Move', Arial, sans-serif;
+  z-index: 10;
 }
-.uber-chat-header {
+.doctor-chat-header {
   display: flex;
   align-items: center;
-  gap: 12px;
-  background: linear-gradient(90deg, #e6f0fa 0%, #d1f5e0 100%);
-  padding: 20px 28px;
+  gap: 14px;
+  background: #fff;
+  padding: 20px 24px;
   font-size: 1.3rem;
   font-weight: 700;
   color: #1a2233;
   border-bottom: 1px solid #e0e0e0;
-  letter-spacing: 0.5px;
-}
-.uber-chat-logo {
-  font-size: 2.2rem;
-  background: #fff;
-  border-radius: 50%;
   box-shadow: 0 2px 8px 0 rgba(0,0,0,0.04);
-  padding: 4px 8px;
 }
-.uber-chat-title {
-  font-family: 'Inter', 'Uber Move', Arial, sans-serif;
+.doctor-chat-logo {
+  font-size: 2.2rem;
+  background: #e6f0fa;
+  border-radius: 50%;
+  padding: 6px 10px;
+}
+.doctor-chat-title {
   letter-spacing: 1px;
 }
-.uber-chat-messages {
+.doctor-chat-main {
+  flex: 1;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+.doctor-chat-messages {
   flex: 1;
   overflow-y: auto;
-  padding: 32px 18px 18px 18px;
-  background: linear-gradient(180deg, #f7fbfd 60%, #e6f0fa 100%);
+  padding: 32px 12px 18px 12px;
   display: flex;
   flex-direction: column;
   gap: 18px;
+  scrollbar-width: thin;
+  scrollbar-color: #e6f0fa #f7fbfd;
 }
-.uber-chat-bubble {
+.doctor-chat-messages::-webkit-scrollbar {
+  width: 8px;
+}
+.doctor-chat-messages::-webkit-scrollbar-thumb {
+  background: #e6f0fa;
+  border-radius: 8px;
+}
+.doctor-chat-bubble {
   max-width: 80%;
   padding: 16px 20px;
   border-radius: 18px;
@@ -169,32 +180,36 @@ body {
   line-height: 1.6;
   word-break: break-word;
   box-shadow: 0 2px 8px 0 rgba(0,0,0,0.04);
-  transition: background 0.2s;
   border: 1px solid #e5e7eb;
+  margin-bottom: 2px;
+  transition: background 0.2s, box-shadow 0.2s;
 }
-.uber-chat-bubble.user {
+.doctor-chat-bubble.user {
   align-self: flex-end;
   background: linear-gradient(90deg, #d1f5e0 60%, #e6f0fa 100%);
   color: #1a2233;
   border-bottom-right-radius: 4px;
   border-top-right-radius: 24px;
+  box-shadow: 0 4px 16px 0 rgba(59,183,143,0.08);
 }
-.uber-chat-bubble.assistant {
+.doctor-chat-bubble.assistant {
   align-self: flex-start;
   background: #fff;
   color: #1a2233;
   border-bottom-left-radius: 4px;
   border-top-left-radius: 24px;
+  box-shadow: 0 4px 16px 0 rgba(230,240,250,0.12);
 }
-.uber-chat-input-row {
+.doctor-chat-input-row {
   display: flex;
   align-items: center;
   gap: 12px;
-  padding: 20px 18px;
+  padding: 18px 12px;
   background: #fff;
   border-top: 1px solid #e0e0e0;
+  box-shadow: 0 -2px 8px 0 rgba(0,0,0,0.02);
 }
-.uber-chat-input {
+.doctor-chat-input {
   flex: 1;
   padding: 14px 18px;
   border-radius: 14px;
@@ -204,10 +219,10 @@ body {
   background: #f7fbfd;
   transition: border 0.2s;
 }
-.uber-chat-input:focus {
+.doctor-chat-input:focus {
   border: 1.5px solid #aee1f9;
 }
-.uber-file-upload-btn {
+.doctor-file-upload-btn {
   display: flex;
   align-items: center;
   cursor: pointer;
@@ -218,13 +233,13 @@ body {
   transition: background 0.2s;
   border: 1px solid #e0e0e0;
 }
-.uber-file-upload-btn:hover {
+.doctor-file-upload-btn:hover {
   background: #d1f5e0;
 }
-.uber-file-input {
+.doctor-file-input {
   display: none;
 }
-.uber-send-btn {
+.doctor-send-btn {
   background: linear-gradient(90deg, #1a2233 60%, #3bb78f 100%);
   color: #fff;
   border: none;
@@ -239,25 +254,29 @@ body {
   transition: background 0.2s;
   box-shadow: 0 2px 8px 0 rgba(0,0,0,0.08);
 }
-.uber-send-btn:disabled {
+.doctor-send-btn:disabled {
   background: #bfc9d1;
   cursor: not-allowed;
 }
 @media (max-width: 600px) {
-  .uber-chat-outer {
+  .doctor-fullscreen-chat {
     max-width: 100vw;
     height: 100vh;
     border-radius: 0;
     margin: 0;
   }
-  .uber-chat-header {
-    padding: 16px 10px;
+  .doctor-chat-header {
+    padding: 14px 8px;
     font-size: 1.1rem;
   }
-  .uber-chat-messages {
-    padding: 16px 6px 10px 6px;
+  .doctor-chat-messages {
+    padding: 12px 4px 8px 4px;
   }
-  .uber-chat-input-row {
-    padding: 12px 6px;
+  .doctor-chat-input-row {
+    padding: 10px 4px;
+  }
+  .doctor-chat-bubble {
+    font-size: 0.98rem;
+    padding: 12px 12px;
   }
 }
