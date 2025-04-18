@@ -1,4 +1,4 @@
-# Next.js Application with Node.js 20
+# Next.js 14.2.4 Application with Node.js 20
 
 This is a modern Next.js application built with Node.js 20 and TypeScript.
 
@@ -28,11 +28,12 @@ Open [http://localhost:3000](http://localhost:3000) with your browser to see the
 
 ## Features
 
-- Next.js 14 with App Router
+- Next.js 14.2.4 with App Router
 - TypeScript support
 - ESLint configured
 - Node.js 20 compatibility
 - CSS Modules for styling
+- Optimized for Cloudflare Pages deployment
 
 ## Learn More
 
@@ -41,8 +42,6 @@ To learn more about Next.js, take a look at the following resources:
 - [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
 - [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
 
-## Deploy on Vercel
+## Deploy on Cloudflare Pages
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new) from the creators of Next.js.
-
-Check out the [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+This project is configured for deployment on Cloudflare Pages. See the cloudflare-pages.md file for detailed deployment instructions.
