@@ -10,8 +10,8 @@ The main Next.js application is located in the `my-nextjs-app` directory.
 
 ```bash
 # Install dependencies
-cd my-nextjs-app
 npm install
+# This will automatically install dependencies in both the root and my-nextjs-app directories
 
 # Run the development server
 npm run dev
@@ -22,7 +22,8 @@ npm run dev
 Just run the standard build command from the root:
 
 ```bash
+npm install
 npm run build
 ```
 
-This will execute the build script in the my-nextjs-app directory. 
+The postinstall script will automatically install dependencies in the my-nextjs-app directory, and the build script will execute the Next.js build process. 
