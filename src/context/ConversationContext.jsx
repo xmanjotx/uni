@@ -73,6 +73,8 @@ export const ConversationProvider = ({ children }) => {
         sender: 'ai',
         timestamp: new Date().toISOString(),
       };
+
+
       setMessages([...updatedMessages, aiMessage]);
     } catch (err) {
       setError(err.message || 'Failed to send message. Please try again.');
@@ -81,8 +83,6 @@ export const ConversationProvider = ({ children }) => {
       setIsLoading(false);
     }
   };
-
-
   /**
    * Handle category selection (send as text query)
    */

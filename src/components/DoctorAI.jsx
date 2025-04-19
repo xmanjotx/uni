@@ -202,6 +202,7 @@ const DoctorAI = () => {
           )}
         </div>
       </div>
+
       {/* Chat Input Section */}
       <div className="border-t border-black p-4 bg-white">
         <div className="max-w-4xl mx-auto">
@@ -250,8 +251,6 @@ const DoctorAI = () => {
           </div>
         </div>
       </div>
-
-
     </div>
   );
 };
