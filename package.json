@@ -4,9 +4,12 @@
   "private": true,
   "scripts": {
     "dev": "cd my-nextjs-app && npm install && npm run dev",
-    "build": "cd my-nextjs-app && npm install && npm run build",
+    "build": "cd my-nextjs-app && rm -rf node_modules && npm install && npm run build",
     "start": "cd my-nextjs-app && npm run start",
     "lint": "cd my-nextjs-app && npm run lint",
     "postinstall": "cd my-nextjs-app && npm install"
+  },
+  "engines": {
+    "node": ">=18.17.0"
   }
 } 
