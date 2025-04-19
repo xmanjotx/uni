@@ -2,6 +2,7 @@ import { useState, useEffect, useRef } from 'react';
 import { motion } from 'framer-motion';
 import { PaperAirplaneIcon, PaperClipIcon, XCircleIcon, HomeIcon } from '@heroicons/react/24/outline';
 import { useConversation } from '../context/ConversationContext';
+import { formatMessageText } from '../utils/markdown/formatMessage';
 
 const DoctorAI = () => {
   const [greeting, setGreeting] = useState('');
@@ -95,13 +96,13 @@ const DoctorAI = () => {
   return (
     <div className="min-h-screen bg-white flex flex-col">
       {/* Header Section */}
-      <header className="flex flex-col items-center py-6 relative">
+      <header className="flex flex-col items-center py-6 relative bg-gray-50 border-b border-gray-200 shadow-sm">
         
         <motion.div
           initial={{ scale: 0 }}
           animate={{ scale: 1 }}
           transition={{ duration: 0.5 }}
-          className="w-16 h-16 rounded-full border-2 border-black flex items-center justify-center mb-3 avatar-pulse"
+          className="w-16 h-16 rounded-full border-2 border-black flex items-center justify-center mb-3 avatar-pulse bg-white shadow-md"
         >
           <span className="text-2xl">👨‍⚕️</span>
         </motion.div>
@@ -109,7 +110,7 @@ const DoctorAI = () => {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.3 }}
-          className="text-3xl font-uber font-medium text-center"
+          className="text-2xl md:text-3xl font-uber font-medium text-center px-4"
         >
           {greeting} How can I assist you today?
         </motion.h1>
@@ -126,13 +127,13 @@ const DoctorAI = () => {
               transition={{ delay: 0.5 }}
               className="flex flex-col items-center justify-center flex-1 py-8"
             >
-              <p className="text-gray-500 mb-6 text-center">Select a category or type a question to get started</p>
-              <div className="grid grid-cols-2 md:grid-cols-3 gap-3 w-full">
+              <p className="text-gray-600 mb-6 text-center max-w-lg mx-auto">Select a category or type a question to get started</p>
+              <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 w-full max-w-3xl mx-auto">
                 {categories.map((category) => (
                   <motion.button
                     key={category.id}
                     whileHover={{ scale: 1.02 }}
-                    className="py-3 border border-black rounded-lg bg-white text-black button-hover shadow-sm"
+                    className="py-4 px-3 border-2 border-black rounded-lg bg-white text-black button-hover shadow-sm hover:shadow-md transition-all"
                     onClick={() => handleCategoryClick(category)}
                   >
                     <h3 className="text-lg font-uber font-medium">{category.title}</h3>
@@ -142,20 +143,28 @@ const DoctorAI = () => {
             </motion.div>
           ) : (
             /* Chat Messages */
-            <div className="flex-1 overflow-y-auto py-6 px-2 space-y-4" style={{ maxHeight: 'calc(100vh - 200px)' }}>
+            <div className="flex-1 overflow-y-auto py-6 px-2 space-y-6" style={{ maxHeight: 'calc(100vh - 220px)' }}>
               {messages.map((message) => (
                 <div
                   key={message.id}
                   className={`flex ${message.sender === 'user' ? 'justify-end' : 'justify-start'}`}
                 >
-                  <div className="max-w-[80%] md:max-w-[70%]">
+                  <div className={`max-w-[85%] md:max-w-[75%] ${message.sender === 'user' ? 'mr-1' : 'ml-1'}`}>
                     <div
-                      className={`p-3 rounded-lg ${message.sender === 'user' ? 'bg-black text-white' : 'bg-gray-100 text-black border border-black'}`}
+                      className={`p-4 rounded-lg shadow-md ${message.sender === 'user' ? 'bg-black text-white rounded-tr-none' : 'bg-gray-100 text-black border border-gray-200 rounded-tl-none'}`}
                     >
-                      <p className="font-uber">{message.text}</p>
+                      {message.sender === 'user' ? (
+                        <p className="font-uber">{message.text}</p>
+                      ) : (
+                        <div 
+                          className="font-uber message-content"
+                          dangerouslySetInnerHTML={{ __html: formatMessageText(message.text) }}
+                        />
+                      )}
                       {message.attachment && (
-                        <div className="mt-2 p-2 bg-gray-200 rounded text-black text-sm">
-                          <p>📎 {message.attachment.name}</p>
+                        <div className="mt-2 p-2 bg-gray-200 rounded text-black text-sm flex items-center">
+                          <span className="mr-2">📎</span>
+                          <p className="truncate">{message.attachment.name}</p>
                         </div>
                       )}
                     </div>
@@ -167,8 +176,8 @@ const DoctorAI = () => {
               ))}
               {isLoading && (
                 <div className="flex justify-start">
-                  <div className="max-w-[80%] md:max-w-[70%]">
-                    <div className="p-3 rounded-lg bg-gray-100 text-black border border-black flex items-center gap-2">
+                  <div className="max-w-[85%] md:max-w-[75%] ml-1">
+                    <div className="p-4 rounded-lg bg-gray-100 text-black border border-gray-200 flex items-center gap-2 shadow-md">
                       <svg className="animate-spin h-5 w-5 text-black mr-2" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
                         <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
                         <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v4a4 4 0 00-4 4H4z"></path>
@@ -180,8 +189,8 @@ const DoctorAI = () => {
               )}
               {error && (
                 <div className="flex justify-center">
-                  <div className="p-3 rounded-lg bg-red-100 text-red-700 border border-red-300">
-                    <p>{error}</p>
+                  <div className="p-4 rounded-lg bg-red-100 text-red-700 border border-red-300 shadow-md max-w-md">
+                    <p className="font-medium">{error}</p>
                   </div>
                 </div>
               )}
@@ -192,13 +201,20 @@ const DoctorAI = () => {
       </div>
 
       {/* Chat Input Section */}
-      <div className="border-t border-black p-4 bg-white">
+      <div className="border-t border-gray-200 p-4 bg-white shadow-lg">
         <div className="max-w-4xl mx-auto">
           {/* Attachment Preview */}
           {attachment && (
-            <div className="mb-2 p-2 bg-gray-100 rounded-lg flex justify-between items-center">
-              <span className="text-sm truncate">{attachment.name}</span>
-              <button onClick={handleRemoveAttachment} className="text-gray-500 hover:text-red-500">
+            <div className="mb-3 p-3 bg-gray-100 rounded-lg flex justify-between items-center border border-gray-200">
+              <span className="text-sm truncate font-medium flex items-center">
+                <span className="mr-2">ud83dudcce</span>
+                {attachment.name}
+              </span>
+              <button 
+                onClick={handleRemoveAttachment} 
+                className="text-gray-500 hover:text-red-500 transition-colors p-1 rounded-full hover:bg-gray-200"
+                aria-label="Remove attachment"
+              >
                 <XCircleIcon className="w-5 h-5" />
               </button>
             </div>
@@ -212,7 +228,7 @@ const DoctorAI = () => {
               className="hidden"
             />
             <button
-              className="p-2 border border-black rounded-lg button-hover"
+              className="p-2 border border-black rounded-lg button-hover w-12 h-12 flex items-center justify-center"
               aria-label="Upload file"
               onClick={handleUploadClick}
               disabled={isLoading || isRestarting}
@@ -225,11 +241,11 @@ const DoctorAI = () => {
               onChange={(e) => setInputText(e.target.value)}
               onKeyDown={handleKeyDown}
               placeholder={messages.length === 0 ? "Type a question or select a category above..." : "Type your question here..."}
-              className="flex-1 p-2 border border-black rounded-lg font-uber text-lg focus:outline-none focus:ring-2 focus:ring-black"
+              className="flex-1 p-3 border border-black rounded-lg font-uber text-lg focus:outline-none focus:ring-2 focus:ring-black"
               disabled={isLoading || isRestarting}
             />
             <button
-              className="p-2 border border-black rounded-lg button-hover"
+              className="p-2 border border-black rounded-lg button-hover w-12 h-12 flex items-center justify-center"
               aria-label="Send message"
               onClick={handleSendMessage}
               disabled={isLoading || isRestarting || (!inputText.trim() && !attachment)}
@@ -239,13 +255,12 @@ const DoctorAI = () => {
             {messages.length > 0 && (
               <button
                 onClick={handleClearConversation}
-                className="p-2 border border-black rounded-lg button-hover ml-1 flex items-center justify-center"
+                className="p-2 border border-black rounded-lg button-hover ml-1 w-12 h-12 flex items-center justify-center"
                 aria-label="Restart conversation"
                 title="Restart conversation"
                 disabled={isRestarting}
-                style={{ width: '40px', height: '40px' }}
               >
-                <HomeIcon className="w-5 h-5 text-gray-700" />
+                <HomeIcon className="w-5 h-5" />
               </button>
             )}
           </div>

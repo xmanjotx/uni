@@ -35,18 +35,76 @@ body {
   font-family: 'Uber Move', -apple-system, BlinkMacSystemFont, sans-serif;
 }
 
+/* Message content styling */
+.message-content h1 {
+  font-size: 1.5rem;
+  font-weight: 700;
+  margin-top: 1.25rem;
+  margin-bottom: 0.75rem;
+}
+
+.message-content h2 {
+  font-size: 1.25rem;
+  font-weight: 600;
+  margin-top: 1rem;
+  margin-bottom: 0.5rem;
+}
+
+.message-content h3 {
+  font-size: 1.125rem;
+  font-weight: 600;
+  margin-top: 0.75rem;
+  margin-bottom: 0.5rem;
+}
+
+.message-content p {
+  margin-bottom: 0.75rem;
+}
+
+.message-content ul, .message-content ol {
+  margin-left: 1.5rem;
+  margin-bottom: 0.75rem;
+}
+
+.message-content li {
+  margin-bottom: 0.25rem;
+}
+
+.message-content hr {
+  margin: 1rem 0;
+  border-top: 1px solid #e5e7eb;
+}
+
+.message-content strong {
+  font-weight: 600;
+}
+
+.message-content em {
+  font-style: italic;
+}
+
 .button-hover {
   transition: all 0.2s ease-in-out;
 }
 
 .button-hover:hover:not(:disabled) {
   transform: scale(1.02);
-  box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1);
+  box-shadow: 0 4px 8px -2px rgba(0, 0, 0, 0.15);
 }
 
 button:disabled {
   opacity: 0.6;
   cursor: not-allowed;
+}
+
+button:focus-visible {
+  outline: 2px solid black;
+  outline-offset: 2px;
+}
+
+input:focus-visible {
+  outline: 2px solid black;
+  outline-offset: 2px;
 }
 
 .avatar-pulse {
