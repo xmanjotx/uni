@@ -96,19 +96,7 @@ const DoctorAI = () => {
     <div className="min-h-screen bg-white flex flex-col">
       {/* Header Section */}
       <header className="flex flex-col items-center py-6 relative">
-        {messages.length > 0 && (
-          <button 
-            onClick={handleClearConversation}
-            className="absolute right-4 top-4 p-2 bg-white border border-gray-200 rounded-full shadow-sm button-hover flex items-center gap-2"
-            aria-label="Restart conversation"
-            title="Restart conversation"
-            disabled={isRestarting}
-            style={{ transition: 'background 0.2s, box-shadow 0.2s' }}
-          >
-            <HomeIcon className="w-5 h-5 text-gray-700" />
-            <span className="hidden sm:inline text-gray-700 font-medium">Restart</span>
-          </button>
-        )}
+        
         <motion.div
           initial={{ scale: 0 }}
           animate={{ scale: 1 }}
@@ -180,12 +168,12 @@ const DoctorAI = () => {
               {isLoading && (
                 <div className="flex justify-start">
                   <div className="max-w-[80%] md:max-w-[70%]">
-                    <div className="p-3 rounded-lg bg-gray-100 text-black border border-black">
-                      <div className="flex space-x-2">
-                        <div className="w-2 h-2 bg-black rounded-full animate-bounce"></div>
-                        <div className="w-2 h-2 bg-black rounded-full animate-bounce" style={{ animationDelay: '0.2s' }}></div>
-                        <div className="w-2 h-2 bg-black rounded-full animate-bounce" style={{ animationDelay: '0.4s' }}></div>
-                      </div>
+                    <div className="p-3 rounded-lg bg-gray-100 text-black border border-black flex items-center gap-2">
+                      <svg className="animate-spin h-5 w-5 text-black mr-2" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                        <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+                        <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v4a4 4 0 00-4 4H4z"></path>
+                      </svg>
+                      <span className="font-uber text-sm text-gray-700">Thinking...</span>
                     </div>
                   </div>
                 </div>
@@ -248,6 +236,18 @@ const DoctorAI = () => {
             >
               <PaperAirplaneIcon className="w-5 h-5" />
             </button>
+            {messages.length > 0 && (
+              <button
+                onClick={handleClearConversation}
+                className="p-2 border border-black rounded-lg button-hover ml-1 flex items-center justify-center"
+                aria-label="Restart conversation"
+                title="Restart conversation"
+                disabled={isRestarting}
+                style={{ width: '40px', height: '40px' }}
+              >
+                <HomeIcon className="w-5 h-5 text-gray-700" />
+              </button>
+            )}
           </div>
         </div>
       </div>
