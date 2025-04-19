@@ -16,8 +16,14 @@
   font-style: normal;
 }
 
-body {
+html, body {
+  height: 100%;
   margin: 0;
+  padding: 0;
+  overflow: hidden;
+}
+
+body {
   font-family: 'Uber Move', -apple-system, BlinkMacSystemFont, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
@@ -25,13 +31,22 @@ body {
   color: black;
 }
 
+.font-uber {
+  font-family: 'Uber Move', -apple-system, BlinkMacSystemFont, sans-serif;
+}
+
 .button-hover {
   transition: all 0.2s ease-in-out;
 }
 
-.button-hover:hover {
+.button-hover:hover:not(:disabled) {
   transform: scale(1.02);
   box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1);
+}
+
+button:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
 }
 
 .avatar-pulse {

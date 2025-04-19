@@ -1,11 +1,14 @@
 import DoctorAI from './components/DoctorAI';
 import { ConversationProvider } from './context/ConversationContext';
+import './App.css';
 
 function App() {
   return (
-    <ConversationProvider>
-      <DoctorAI />
-    </ConversationProvider>
+    <div className="app-container">
+      <ConversationProvider>
+        <DoctorAI />
+      </ConversationProvider>
+    </div>
   );
 }
 

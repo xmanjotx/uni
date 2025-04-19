@@ -21,7 +21,7 @@ export const sendMessage = async (message, conversationHistory = [], attachment 
       formData.append('attachment', attachment);
     }
 
-    const response = await fetch(`${API_URL}/chat`, {
+    const response = await fetch(`${API_URL}`, {
       method: 'POST',
       body: formData,
     });
@@ -45,7 +45,7 @@ export const sendMessage = async (message, conversationHistory = [], attachment 
  */
 export const getCategoryInfo = async (category, conversationHistory = []) => {
   try {
-    const response = await fetch(`${API_URL}/category`, {
+    const response = await fetch(`${API_URL}`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -79,7 +79,7 @@ export const uploadHealthRecord = async (file, conversationHistory = []) => {
     formData.append('file', file);
     formData.append('conversation', JSON.stringify(conversationHistory));
 
-    const response = await fetch(`${API_URL}/upload-health-record`, {
+    const response = await fetch(`${API_URL}`, {
       method: 'POST',
       body: formData,
     });

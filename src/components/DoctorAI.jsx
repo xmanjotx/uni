@@ -1,12 +1,13 @@
 import { useState, useEffect, useRef } from 'react';
 import { motion } from 'framer-motion';
-import { PaperAirplaneIcon, PaperClipIcon, XCircleIcon } from '@heroicons/react/24/outline';
+import { PaperAirplaneIcon, PaperClipIcon, XCircleIcon, HomeIcon } from '@heroicons/react/24/outline';
 import { useConversation } from '../context/ConversationContext';
 
 const DoctorAI = () => {
   const [greeting, setGreeting] = useState('');
   const [inputText, setInputText] = useState('');
   const [attachment, setAttachment] = useState(null);
+  const [isRestarting, setIsRestarting] = useState(false);
   const fileInputRef = useRef(null);
   const messagesEndRef = useRef(null);
   
@@ -74,6 +75,16 @@ const DoctorAI = () => {
     fileInputRef.current?.click();
   };
   
+  const handleClearConversation = () => {
+    if (window.confirm('Are you sure you want to restart the conversation? This will clear all messages.')) {
+      setIsRestarting(true);
+      setTimeout(() => {
+        clearConversation();
+        setIsRestarting(false);
+      }, 500); // Short delay for visual feedback
+    }
+  };
+  
   const handleRemoveAttachment = () => {
     setAttachment(null);
     if (fileInputRef.current) {
@@ -82,9 +93,21 @@ const DoctorAI = () => {
   };
 
   return (
-    <div className="min-h-screen bg-white p-2 md:p-6 flex flex-col">
+    <div className="min-h-screen bg-white flex flex-col">
       {/* Header Section */}
-      <header className="flex flex-col items-center mb-8">
+      <header className="flex flex-col items-center py-6 border-b border-black relative">
+        {messages.length > 0 && (
+          <button 
+            onClick={handleClearConversation}
+            className={`absolute left-4 top-1/2 transform -translate-y-1/2 p-2 border border-black rounded-lg button-hover flex items-center gap-2 ${isRestarting ? 'bg-gray-200' : ''}`}
+            aria-label="Restart conversation"
+            title="Restart conversation"
+            disabled={isRestarting}
+          >
+            <HomeIcon className={`w-5 h-5 ${isRestarting ? 'animate-pulse' : ''}`} />
+            <span className="hidden sm:inline">{isRestarting ? 'Restarting...' : 'Restart'}</span>
+          </button>
+        )}
         <motion.div
           initial={{ scale: 0 }}
           animate={{ scale: 1 }}
@@ -103,74 +126,84 @@ const DoctorAI = () => {
         </motion.h1>
       </header>
 
-      {/* Main Content - Grid of Buttons (only show if no messages yet) */}
-      {messages.length === 0 && (
-        <motion.div
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ delay: 0.5 }}
-          className="grid grid-cols-2 md:grid-cols-3 gap-2 mb-8"
-        >
-          {categories.map((category) => (
-            <motion.button
-              key={category.id}
-              whileHover={{ scale: 1.02 }}
-              className="py-2 border border-black rounded-lg bg-white text-black button-hover"
-              onClick={() => handleCategoryClick(category)}
+      {/* Main Content Area */}
+      <div className="flex-1 flex flex-col items-center justify-center overflow-hidden">
+        <div className="w-full max-w-4xl px-4 flex-1 flex flex-col">
+          {/* Category Buttons (only show if no messages yet) */}
+          {messages.length === 0 ? (
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ delay: 0.5 }}
+              className="flex flex-col items-center justify-center flex-1 py-8"
             >
-              <h3 className="text-lg font-uber font-medium">{category.title}</h3>
-            </motion.button>
-          ))}
-        </motion.div>
-      )}
-
-      {/* Chat Messages */}
-      {messages.length > 0 && (
-        <div className="flex-1 overflow-y-auto mb-20 px-2">
-          {messages.map((message) => (
-            <div
-              key={message.id}
-              className={`mb-4 ${message.sender === 'user' ? 'text-right' : 'text-left'}`}
-            >
-              <div
-                className={`inline-block max-w-[80%] md:max-w-[70%] p-3 rounded-lg ${message.sender === 'user' ? 'bg-black text-white' : 'bg-gray-100 text-black border border-black'}`}
-              >
-                <p className="font-uber">{message.text}</p>
-                {message.attachment && (
-                  <div className="mt-2 p-2 bg-gray-200 rounded text-black text-sm">
-                    <p>📎 {message.attachment.name}</p>
+              <p className="text-gray-500 mb-6 text-center">Select a category or type a question to get started</p>
+              <div className="grid grid-cols-2 md:grid-cols-3 gap-3 w-full">
+                {categories.map((category) => (
+                  <motion.button
+                    key={category.id}
+                    whileHover={{ scale: 1.02 }}
+                    className="py-3 border border-black rounded-lg bg-white text-black button-hover shadow-sm"
+                    onClick={() => handleCategoryClick(category)}
+                  >
+                    <h3 className="text-lg font-uber font-medium">{category.title}</h3>
+                  </motion.button>
+                ))}
+              </div>
+            </motion.div>
+          ) : (
+            /* Chat Messages */
+            <div className="flex-1 overflow-y-auto py-6 px-2 space-y-4" style={{ maxHeight: 'calc(100vh - 200px)' }}>
+              {messages.map((message) => (
+                <div
+                  key={message.id}
+                  className={`flex ${message.sender === 'user' ? 'justify-end' : 'justify-start'}`}
+                >
+                  <div className="max-w-[80%] md:max-w-[70%]">
+                    <div
+                      className={`p-3 rounded-lg ${message.sender === 'user' ? 'bg-black text-white' : 'bg-gray-100 text-black border border-black'}`}
+                    >
+                      <p className="font-uber">{message.text}</p>
+                      {message.attachment && (
+                        <div className="mt-2 p-2 bg-gray-200 rounded text-black text-sm">
+                          <p>📎 {message.attachment.name}</p>
+                        </div>
+                      )}
+                    </div>
+                    <p className="text-xs text-gray-500 mt-1 text-right">
+                      {new Date(message.timestamp).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
+                    </p>
                   </div>
-                )}
-              </div>
-              <p className="text-xs text-gray-500 mt-1">
-                {new Date(message.timestamp).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
-              </p>
-            </div>
-          ))}
-          {isLoading && (
-            <div className="text-left mb-4">
-              <div className="inline-block max-w-[80%] md:max-w-[70%] p-3 rounded-lg bg-gray-100 text-black border border-black">
-                <div className="flex space-x-2">
-                  <div className="w-2 h-2 bg-black rounded-full animate-bounce"></div>
-                  <div className="w-2 h-2 bg-black rounded-full animate-bounce" style={{ animationDelay: '0.2s' }}></div>
-                  <div className="w-2 h-2 bg-black rounded-full animate-bounce" style={{ animationDelay: '0.4s' }}></div>
                 </div>
-              </div>
+              ))}
+              {isLoading && (
+                <div className="flex justify-start">
+                  <div className="max-w-[80%] md:max-w-[70%]">
+                    <div className="p-3 rounded-lg bg-gray-100 text-black border border-black">
+                      <div className="flex space-x-2">
+                        <div className="w-2 h-2 bg-black rounded-full animate-bounce"></div>
+                        <div className="w-2 h-2 bg-black rounded-full animate-bounce" style={{ animationDelay: '0.2s' }}></div>
+                        <div className="w-2 h-2 bg-black rounded-full animate-bounce" style={{ animationDelay: '0.4s' }}></div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              )}
+              {error && (
+                <div className="flex justify-center">
+                  <div className="p-3 rounded-lg bg-red-100 text-red-700 border border-red-300">
+                    <p>{error}</p>
+                  </div>
+                </div>
+              )}
+              <div ref={messagesEndRef} />
             </div>
           )}
-          {error && (
-            <div className="text-center mb-4">
-              <div className="inline-block p-3 rounded-lg bg-red-100 text-red-700 border border-red-300">
-                <p>{error}</p>
-              </div>
-            </div>
-          )}
-          <div ref={messagesEndRef} />
         </div>
-      )}
+      </div>
 
       {/* Chat Input Section */}
-      <div className="fixed bottom-0 left-0 right-0 p-3 bg-white border-t border-black">
+      <div className="border-t border-black p-4 bg-white">
         <div className="max-w-4xl mx-auto">
           {/* Attachment Preview */}
           {attachment && (
@@ -193,6 +226,7 @@ const DoctorAI = () => {
               className="p-2 border border-black rounded-lg button-hover"
               aria-label="Upload file"
               onClick={handleUploadClick}
+              disabled={isLoading || isRestarting}
             >
               <PaperClipIcon className="w-5 h-5" />
             </button>
@@ -201,15 +235,15 @@ const DoctorAI = () => {
               value={inputText}
               onChange={(e) => setInputText(e.target.value)}
               onKeyDown={handleKeyDown}
-              placeholder="Type your question here..."
+              placeholder={messages.length === 0 ? "Type a question or select a category above..." : "Type your question here..."}
               className="flex-1 p-2 border border-black rounded-lg font-uber text-lg focus:outline-none focus:ring-2 focus:ring-black"
-              disabled={isLoading}
+              disabled={isLoading || isRestarting}
             />
             <button
               className="p-2 border border-black rounded-lg button-hover"
               aria-label="Send message"
               onClick={handleSendMessage}
-              disabled={isLoading || (!inputText.trim() && !attachment)}
+              disabled={isLoading || isRestarting || (!inputText.trim() && !attachment)}
             >
               <PaperAirplaneIcon className="w-5 h-5" />
             </button>
