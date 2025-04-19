@@ -3,11 +3,10 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "cd my-nextjs-app && npm install && npm run dev",
-    "build": "cd my-nextjs-app && rm -rf .next dist && npm install && npm run build",
+    "dev": "cd my-nextjs-app && npm run dev",
+    "build": "cd my-nextjs-app && npm install && npm run build",
     "start": "cd my-nextjs-app && npm run start",
-    "lint": "cd my-nextjs-app && npm run lint",
-    "postinstall": "cd my-nextjs-app && npm install"
+    "lint": "cd my-nextjs-app && npm run lint"
   },
   "engines": {
     "node": ">=18.17.0"
