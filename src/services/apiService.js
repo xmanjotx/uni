@@ -2,95 +2,73 @@
  * API Service for communicating with the api.opticure.io backend
  */
 
-const API_URL = 'https://api.opticure.io';
+const API_BASE_URL = 'https://api.opticure.io';
 
 /**
- * Send a message to the AI and get a response
- * @param {string} message - The user's message
- * @param {Array} conversationHistory - Previous messages in the conversation
- * @param {File|null} attachment - Optional file attachment
+ * Send a text query to the AI
+ * @param {string} query - The user's question
  * @returns {Promise} - Promise with the AI response
  */
-export const sendMessage = async (message, conversationHistory = [], attachment = null) => {
+export const sendTextQuery = async (query) => {
   try {
-    const formData = new FormData();
-    formData.append('message', message);
-    formData.append('conversation', JSON.stringify(conversationHistory));
-    
-    if (attachment) {
-      formData.append('attachment', attachment);
-    }
-
-    const response = await fetch(`${API_URL}`, {
-      method: 'POST',
-      body: formData,
-    });
-
-    if (!response.ok) {
-      throw new Error(`API error: ${response.status}`);
-    }
-
-    return await response.json();
-  } catch (error) {
-    console.error('Error sending message:', error);
-    throw error;
-  }
-};
-
-/**
- * Get category-specific information from the AI
- * @param {string} category - The selected category
- * @param {Array} conversationHistory - Previous messages in the conversation
- * @returns {Promise} - Promise with the AI response
- */
-export const getCategoryInfo = async (category, conversationHistory = []) => {
-  try {
-    const response = await fetch(`${API_URL}`, {
+    const response = await fetch(`${API_BASE_URL}/text`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify({
-        category,
-        conversation: conversationHistory,
-      }),
+      body: JSON.stringify({ query }),
     });
-
-    if (!response.ok) {
-      throw new Error(`API error: ${response.status}`);
+    const data = await response.json();
+    if (!response.ok || data.error) {
+      throw new Error(data.message || 'API error');
     }
-
-    return await response.json();
+    return data;
   } catch (error) {
-    console.error('Error getting category info:', error);
+    console.error('Error sending text query:', error);
     throw error;
   }
 };
 
 /**
- * Upload health records to the AI system
- * @param {File} file - The health record file
- * @param {Array} conversationHistory - Previous messages in the conversation
+ * Upload a file for analysis
+ * @param {File} file - The file to upload
  * @returns {Promise} - Promise with the AI response
  */
-export const uploadHealthRecord = async (file, conversationHistory = []) => {
+export const uploadFile = async (file) => {
   try {
     const formData = new FormData();
     formData.append('file', file);
-    formData.append('conversation', JSON.stringify(conversationHistory));
-
-    const response = await fetch(`${API_URL}`, {
+    const response = await fetch(`${API_BASE_URL}/file`, {
       method: 'POST',
       body: formData,
     });
-
-    if (!response.ok) {
-      throw new Error(`API error: ${response.status}`);
+    const data = await response.json();
+    if (!response.ok || data.error) {
+      throw new Error(data.message || 'API error');
     }
-
-    return await response.json();
+    return data;
   } catch (error) {
-    console.error('Error uploading health record:', error);
+    console.error('Error uploading file:', error);
+    throw error;
+  }
+};
+
+/**
+ * Health check endpoint
+ * @returns {Promise} - Promise with the health check response
+ */
+export const healthCheck = async () => {
+  try {
+    const response = await fetch(`${API_BASE_URL}/`, {
+      method: 'GET',
+    });
+    const data = await response.json();
+    if (!response.ok || data.error) {
+      throw new Error(data.message || 'API error');
+    }
+    return data;
+  } catch (error) {
+    console.error('Error in health check:', error);
     throw error;
   }
 };

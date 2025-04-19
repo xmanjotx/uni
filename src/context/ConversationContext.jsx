@@ -1,5 +1,5 @@
 import { createContext, useContext, useState, useEffect } from 'react';
-import { sendMessage, getCategoryInfo, uploadHealthRecord } from '../services/apiService';
+import { sendTextQuery, uploadFile } from '../services/apiService';
 
 const ConversationContext = createContext();
 
@@ -31,7 +31,7 @@ export const ConversationProvider = ({ children }) => {
   }, [messages]);
 
   /**
-   * Send a user message to the AI
+   * Send a user message to the AI (text or file)
    */
   const sendUserMessage = async (text, attachment = null) => {
     if (!text.trim() && !attachment) return;
@@ -56,9 +56,16 @@ export const ConversationProvider = ({ children }) => {
     setMessages(updatedMessages);
 
     try {
-      // Send to API
-      const response = await sendMessage(text, messages, attachment);
-      
+      let response;
+      if (attachment) {
+        // File size validation (1 MB limit)
+        if (attachment.size > 1024 * 1024) {
+          throw new Error('The uploaded file exceeds the maximum size limit of 1 MB.');
+        }
+        response = await uploadFile(attachment);
+      } else {
+        response = await sendTextQuery(text);
+      }
       // Add AI response to the conversation
       const aiMessage = {
         id: Date.now() + 1,
@@ -66,100 +73,28 @@ export const ConversationProvider = ({ children }) => {
         sender: 'ai',
         timestamp: new Date().toISOString(),
       };
-      
       setMessages([...updatedMessages, aiMessage]);
     } catch (err) {
-      setError('Failed to send message. Please try again.');
+      setError(err.message || 'Failed to send message. Please try again.');
       console.error('Error in sendUserMessage:', err);
     } finally {
       setIsLoading(false);
     }
   };
 
+
   /**
-   * Handle category selection
+   * Handle category selection (send as text query)
    */
   const selectCategory = async (category) => {
-    setIsLoading(true);
-    setError(null);
-
-    // Add category selection as a user message
-    const userMessage = {
-      id: Date.now(),
-      text: `I'd like information about ${category}`,
-      sender: 'user',
-      timestamp: new Date().toISOString(),
-      category
-    };
-
-    const updatedMessages = [...messages, userMessage];
-    setMessages(updatedMessages);
-
-    try {
-      // Get category info from API
-      const response = await getCategoryInfo(category, messages);
-      
-      // Add AI response to the conversation
-      const aiMessage = {
-        id: Date.now() + 1,
-        text: response.message,
-        sender: 'ai',
-        timestamp: new Date().toISOString(),
-      };
-      
-      setMessages([...updatedMessages, aiMessage]);
-    } catch (err) {
-      setError(`Failed to get information about ${category}. Please try again.`);
-      console.error('Error in selectCategory:', err);
-    } finally {
-      setIsLoading(false);
-    }
+    await sendUserMessage(`I'd like information about ${category}`);
   };
 
   /**
-   * Upload a health record
+   * Upload a health record (file)
    */
   const uploadRecord = async (file) => {
-    if (!file) return;
-
-    setIsLoading(true);
-    setError(null);
-
-    // Add upload action as a user message
-    const userMessage = {
-      id: Date.now(),
-      text: `I'm uploading my health record: ${file.name}`,
-      sender: 'user',
-      timestamp: new Date().toISOString(),
-      attachment: {
-        name: file.name,
-        type: file.type,
-        size: file.size
-      }
-    };
-
-    const updatedMessages = [...messages, userMessage];
-    setMessages(updatedMessages);
-
-    try {
-      // Upload to API
-      const response = await uploadHealthRecord(file, messages);
-      
-      // Add AI response to the conversation
-      const aiMessage = {
-        id: Date.now() + 1,
-        text: response.message,
-        sender: 'ai',
-        timestamp: new Date().toISOString(),
-      };
-      
-      setMessages([...updatedMessages, aiMessage]);
-    } catch (err) {
-      setError('Failed to upload health record. Please try again.');
-      console.error('Error in uploadRecord:', err);
-    } finally {
-      setIsLoading(false);
-    }
+    await sendUserMessage('', file);
   };
 
   /**

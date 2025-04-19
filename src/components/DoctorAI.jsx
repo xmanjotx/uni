@@ -95,17 +95,18 @@ const DoctorAI = () => {
   return (
     <div className="min-h-screen bg-white flex flex-col">
       {/* Header Section */}
-      <header className="flex flex-col items-center py-6 border-b border-black relative">
+      <header className="flex flex-col items-center py-6 relative">
         {messages.length > 0 && (
           <button 
             onClick={handleClearConversation}
-            className={`absolute left-4 top-1/2 transform -translate-y-1/2 p-2 border border-black rounded-lg button-hover flex items-center gap-2 ${isRestarting ? 'bg-gray-200' : ''}`}
+            className="absolute right-4 top-4 p-2 bg-white border border-gray-200 rounded-full shadow-sm button-hover flex items-center gap-2"
             aria-label="Restart conversation"
             title="Restart conversation"
             disabled={isRestarting}
+            style={{ transition: 'background 0.2s, box-shadow 0.2s' }}
           >
-            <HomeIcon className={`w-5 h-5 ${isRestarting ? 'animate-pulse' : ''}`} />
-            <span className="hidden sm:inline">{isRestarting ? 'Restarting...' : 'Restart'}</span>
+            <HomeIcon className="w-5 h-5 text-gray-700" />
+            <span className="hidden sm:inline text-gray-700 font-medium">Restart</span>
           </button>
         )}
         <motion.div
@@ -201,7 +202,6 @@ const DoctorAI = () => {
           )}
         </div>
       </div>
-
       {/* Chat Input Section */}
       <div className="border-t border-black p-4 bg-white">
         <div className="max-w-4xl mx-auto">
@@ -250,6 +250,8 @@ const DoctorAI = () => {
           </div>
         </div>
       </div>
+
+
     </div>
   );
 };
